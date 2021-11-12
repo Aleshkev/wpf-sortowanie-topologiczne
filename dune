@@ -1,0 +1,14 @@
+(library
+ (name pMap)
+ (modules pMap))
+
+(library
+ (name topol)
+ ; make all warnings non-fatal
+ (flags
+  (:standard -warn-error -a))
+ ; ocamlc warnings are disabled because ocamlopt shows the same warnings
+ (ocamlc_flags
+  (:standard -w -a))
+ (modules topol)
+ (libraries pMap))

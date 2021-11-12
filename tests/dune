@@ -1,0 +1,13 @@
+(tests
+ (names
+  a_important_case
+  GH_aswietlik
+  GH_Day1721
+  GH_mdrozdowski1996
+  ; x_mgienieczko
+  z_GH_Nhemisirmkow)
+ (flags
+  (:standard -warn-error -a))
+ (ocamlc_flags
+  (:standard -w -a))
+ (libraries topol))
