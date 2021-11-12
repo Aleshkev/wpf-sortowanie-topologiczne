@@ -15,7 +15,9 @@ let topol dependencies =
         List.fold_left
           (fun (graph, degrees) a ->
             let graph = graph |> update a (fun bb -> b :: bb) []
-            and degrees = degrees |> update b (fun x -> x + 1) 0 in
+            and degrees =
+              degrees |> update a Fun.id 0 |> update b (fun x -> x + 1) 0
+            in
             graph, degrees)
           (graph, degrees) aa)
       (PMap.empty, PMap.empty) dependencies
@@ -38,11 +40,9 @@ let topol dependencies =
            które po takim zmniejszeniu miałyby stopień 0. *)
         let queue', degrees' =
           List.fold_left
-            (fun (queue', degrees') b ->
-              let queue' =
-                if degrees' |> PMap.find b = 1 then b :: queue' else queue'
-              and degrees' = degrees' |> update b (fun x -> x - 1) 0 in
-              queue', degrees')
+            (fun (queue, degrees) b ->
+              ( (if degrees |> PMap.find b = 1 then b :: queue else queue),
+                degrees |> update b (fun x -> x - 1) 0 ))
             (queue, degrees)
             (graph |> PMap.find a)
         in
