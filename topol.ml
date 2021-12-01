@@ -1,12 +1,15 @@
 exception Cykliczne
 
+(** Zamienia w [map] wartość dla [key] z jakiegoś [x] na [f x] jeżeli [key] jest
+    w [map], w przeciwnym wypadku wstawia [f default]. *)
 let update key f default map =
   map |> PMap.add key (f (try map |> PMap.find key with Not_found -> default))
 
 let topol dependencies =
   (* Graf to mapa z nazwy wierzchołka na listę nazw wierzchołków, do których
      istnieje krawędź. "Stopniem" nazywamy liczbę krawędzi wchodzących do
-     wierzchołka. *)
+     wierzchołka. Update'ujemy z identycznością żeby na pewno były klucze dla
+     wszystkich wierzchołków z wejścia. *)
   let graph, degrees =
     List.fold_left
       (fun (graph, degrees) (b, aa) ->
@@ -14,11 +17,8 @@ let topol dependencies =
         and degrees = degrees |> update b Fun.id 0 in
         List.fold_left
           (fun (graph, degrees) a ->
-            let graph = graph |> update a (fun bb -> b :: bb) []
-            and degrees =
-              degrees |> update a Fun.id 0 |> update b (fun x -> x + 1) 0
-            in
-            graph, degrees)
+            ( graph |> update a (fun bb -> b :: bb) [],
+              degrees |> update a Fun.id 0 |> update b (fun x -> x + 1) 0 ))
           (graph, degrees) aa)
       (PMap.empty, PMap.empty) dependencies
   in

@@ -6,7 +6,7 @@ open Topol
 
 exception WA
 
-let debug = false
+let debug = true
 
 (* True if the given order is a correct topological order, *)
 (* false otherwise. Checks all edges.                      *)
