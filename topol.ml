@@ -1,3 +1,6 @@
+(*       Autor: Jonasz Aleszkiewicz *)
+(* Code Review: Kacper Bal          *)
+
 open List
 
 exception Cykliczne
